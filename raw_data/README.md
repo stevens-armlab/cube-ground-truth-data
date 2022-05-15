@@ -14,5 +14,7 @@ Qz=c
 
 Tx ,Ty, Tz stands for the position of the probe's center in the sensor coordinate system
 
-We are using the Aurora 5DOF tracker, so the Qz will always be zero and it has nothing to do with our result.
+We are using the Aurora 5DOF tracker, so the Qz will always be zero and it has nothing to do with our result. 
+
+For more sensor information, see in this link: https://www.ndigital.com/electromagnetic-tracking-technology/aurora/
 
