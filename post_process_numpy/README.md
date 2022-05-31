@@ -23,19 +23,17 @@ https://pypi.org/project/scikit-learn/
 
 # Code
 
-##### Explanation
-
-##### Plane Dataclass
+## Plane Dataclass
 
 A class for representing a plane in standard form, ax + by + cz + d = 0.
 
-##### Methods
+### Methods
 
-##### def __post_init__(self) -> None
+##### __post_init__(self) -> None
 
 Post init method for declaring variables from the above dataclass fields.
 
-##### def __str__(self) -> str
+##### __str__(self) -> str
 
 Overide of the default dataclass str method to print nicely.
 
@@ -52,7 +50,7 @@ and returns a tuple of 3 mesh grids which can be used for
 graphing the plane in terms of term using the axis lengths
 in the axisLengths tuple for x, y, and z respectively.
 
-##### Static Methods
+### Static Methods
 
 ##### estimatePlane(points: np.ndarray) -> "Plane":
 
@@ -75,7 +73,7 @@ containing the names of the two corresponding planes and the
 angle between them.
 
 
-#### Functions
+## Functions
 
 ##### parsePoints1(headerFileName: str, constantTransform: np.ndarray, sampleSize: int) -> tuple[np.ndarray, list[str]]
 
