@@ -2,23 +2,24 @@
 
 Run with Python 3.10.2
 
-Running this script should be relatively easy if you read the comments in the run() function and docstrings.
-
 # Dependencies
 
-Install using pip or conda
+Install the latest version using pip or conda
 
-##### Numpy
+##### Numpy==1.22.3
 https://pypi.org/project/numpy/
 
-##### Pandas
+##### Pandas==1.4.2
 https://pypi.org/project/pandas/
 
-##### Plotly
+##### Plotly==5.6.0
 https://pypi.org/project/plotly/
 
-##### Scipy
+##### Scipy==1.8.0
 https://pypi.org/project/scipy/
 
-##### Sklearn
+##### Sklearn==1.0.2
 https://pypi.org/project/scikit-learn/
+
+# Code
+
