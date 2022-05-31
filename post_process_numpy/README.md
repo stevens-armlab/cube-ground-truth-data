@@ -23,6 +23,10 @@ https://pypi.org/project/scikit-learn/
 
 # Code
 
+This code is used to take in points distributed from planes given in different formats, run the points through PCA to estimate the planes that the points are
+distributed from, and find intersections between the planes.  Additionally, provides a way to visualize the planes and give the angles between planes to check
+the accuracy of the plane estimations.
+
 ## Plane Dataclass
 
 A class for representing a plane in standard form, ax + by + cz + d = 0.
