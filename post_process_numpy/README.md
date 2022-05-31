@@ -25,6 +25,54 @@ https://pypi.org/project/scikit-learn/
 
 ##### Explanation
 
+##### Plane Dataclass
+
+A class for representing a plane in standard form, ax + by + cz + d = 0.
+
+##### Methods
+
+##### def __post_init__(self) -> None
+
+Post init method for declaring variables from the above dataclass fields.
+
+##### def __str__(self) -> str
+
+Overide of the default dataclass str method to print nicely.
+
+##### randomPoint(self, n: float, b: float) -> list[float]
+
+Generates a point in R3 that is close to
+the plane, but within the closed boundary,
+[-b, b] with some added uniform noise, n.
+
+##### getMeshGrids(self, term: str, axisLengths: list[float]) -> tuple[np.meshgrid, np.meshgrid, np.meshgrid]
+
+Takes as input a term, either 'x', 'y', 'z' then calculates
+and returns a tuple of 3 mesh grids which can be used for
+graphing the plane in terms of term using the axis lengths
+in the axisLengths tuple for x, y, and z respectively.
+
+##### Static Methods
+
+##### estimatePlane(points: np.ndarray) -> "Plane":
+
+Takes as input a matrix which is the number of
+points by 3 as a coordinate in R3 has 3 components,
+then fits and returns the bestfit plane using PCA.
+
+##### solveIntersection(planes: np.ndarray, threshold: float=100) -> np.ndarray:
+
+Takes in a list of planes, planes, then calculates the
+point where 3 planes intersect if any exists. Removes all
+points with at least one component larger than the threshold.
+
+##### anglesBetweenPlanes(planes: list["Plane"], planeNames: list[str], radians: bool=True) -> list[tuple[str, str, float]]:
+
+Takes as input a list of planes, planes, and a parallel list
+of strings, planeNames, representing the name of each plane in
+planes, then calculates and returns the a list of tuples
+containing the names of the two corresponding planes and the
+angle between them.
 
 
 #### Functions
@@ -65,5 +113,6 @@ The main function used for all execution and to not pollute the
 global namespace. Parts (A) - (F) define all parts of the code.
 Takes in a variable to n for sampling points.  Uses all points
 if n = math.inf (default).  n != 0 Works for parsePoints1(),
-however it is NOT fully implemented for parsePoints2().
+however it is NOT fully implemented for parsePoints2() as it
+does not sample points.
 
