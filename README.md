@@ -5,6 +5,7 @@ This repo contains code to post process data collected by a digitizer (probe) to
 
 Picture of the Cube:
 
-![cube1](C:\Users\ThunderLight\Documents\GitHub\cube-ground-truth-data\img\cube1.jpg)
+![image](https://github.com/stevens-armlab/cube-ground-truth-data/blob/main/img/cube1.jpg)
 
-![cube2](C:\Users\ThunderLight\Documents\GitHub\cube-ground-truth-data\img\cube2.jpg)
+![image](https://github.com/stevens-armlab/cube-ground-truth-data/blob/main/img/cube2.jpg)
+
