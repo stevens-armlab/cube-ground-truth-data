@@ -207,10 +207,10 @@ class Plane():
         return namesAngles  # Return the list of tuples.
 
 
-def parsePoints1(headerFileName: str,
-                 constantTransform: np.ndarray,
-                 sampleSize: int,
-                ) -> tuple[np.ndarray, list[str]]:
+def parseFileKinova(headerFileName: str,
+                    constantTransform: np.ndarray,
+                    sampleSize: int,
+                   ) -> tuple[np.ndarray, list[str]]:
     """
     Takes in a filename specifying a header file, headerFileName, that
     is properly formatted and a constant transform, constantTransform,
@@ -238,6 +238,11 @@ def parsePoints1(headerFileName: str,
     for planeIndex, plane in enumerate(planesList):
 
         planeNames.append(plane["plane_name"])  # Record plane name.
+
+        # Set max sampling size.
+        length = len(plane["robot_arm_data_json_file_names"])
+        if sampleSize > length:
+            sampleSize = length
 
         # Loop for all the points in each plane.
         s = sample(plane["robot_arm_data_json_file_names"],
@@ -279,10 +284,10 @@ def parsePoints1(headerFileName: str,
     return np.array(planePoints), planeNames
 
 
-def parsePoints2(fileNames: list[str],
-                 sampleSize: int,
-                 threshold: int,
-                ) -> tuple[list[list[float]], list[str]]:
+def parseFileNDI(fileNames: list[str],
+                sampleSize: int,
+                threshold: int,
+               ) -> tuple[list[list[float]], list[str]]:
     """
     Takes in a list of filename specifying csv files that are properly
     formatted and returns a list of all the points for each plane,
@@ -299,8 +304,9 @@ def parsePoints2(fileNames: list[str],
     # Additionally, construct plane names.
     files = [pd.read_csv(fileName) for fileName in fileNames]
     xyzs = np.array([np.array([file["Tx"], file["Ty"], file["Tz"]]).T
-                     for file in files])
-    planeNames = [fileName[:fileName.index('.')]
+                     for file in files], dtype=object)
+    planeNames = [fileName[len(fileName)-fileName[::-1].index('/')
+                           :len(fileName)-fileName[::-1].index('.')-1]
                   for fileName in fileNames]
 
     planePoints = []  # A container to hold the planePoints.
@@ -310,9 +316,13 @@ def parsePoints2(fileNames: list[str],
 
         plane = []  # A container to hold points in this plane.
 
-        # Loop for all points in the plane.
-        # s = sample(points, sampleSize)  # Sample the points.
-        for xyz in points:
+        # Set max sampling size.
+        if sampleSize > (length := points.shape[0]):
+            sampleSize = length
+
+        # Loop for all sampled points in the plane.
+        s = sample(list(points), sampleSize)  # Sample the points.
+        for xyz in s:
 
             # Check all components are within the threshold.
             if all([-threshold < c and c < threshold for c in xyz]):
@@ -396,9 +406,7 @@ def run(n: int = math.inf) -> None:
     """
     The main function used for all execution and to not pollute the
     global namespace. Parts (A) - (F) define all parts of the code.
-    Takes in a variable to n for sampling points.  Uses all points
-    if n = math.inf (default).  n != 0 Works for parsePoints1(),
-    however it is NOT fully implemented for parsePoints2().
+    Takes in a variable to n for sampling points.
     """
 
     # (A) Variables needed as input.
@@ -408,10 +416,19 @@ def run(n: int = math.inf) -> None:
                  "back.csv",
                  "left.csv",
                  "right.csv"]
-    headerFileName = "header.json"
+    fileNames = ["./../raw_data/Surface Points by NDI tracker/" + fn
+                 for fn in fileNames]  # Prepend directory.
+
+    headerFileName = "header.json"  # Used only for Kinova.
     constantTransform = np.array([[1, 0, 0, 0],
                                   [0, 1, 0, 0],
                                   [0, 0, 1, 0.139]])
+
+    parser = "ndi"  # Options are "Kinova" or "EM".
+
+    # Purely for visualization.
+    terms = ['x', 'x', 'z', 'z', 'y', 'y']  # Terms to graph in.
+    axisLength = (-150, 150, -100, 100, 100, -250)  # Axe lengths.
 
     ##################################################################
     # (B) Get the plane points, where planePoints is a 3D tensor
@@ -439,14 +456,16 @@ def run(n: int = math.inf) -> None:
     # axisLength = (-150, 150, -100, 100, 100, -250)  # Axe lengths.
 
     # (2) Read the points and the names of the planes
-    # from a file using one of the ad hoc parsePoint functions.
+    # from a file using one of the ad hoc parse functions.
 
-    # planePoints, planeNames = parsePoints1(headerFileName,
-    #                                        constantTransform, n)
-    planePoints, planeNames = parsePoints2(fileNames, n, 1000)
-
-    terms = ['x', 'x', 'z', 'z', 'y', 'y']  # Terms to graph in.
-    axisLength = (-150, 150, -100, 100, 100, -250)  # Axe lengths.
+    if parser == "kinova":
+        planePoints, planeNames = parseFileKinova(headerFileName,
+                                                  constantTransform,
+                                                  n)
+    elif parser == "ndi":
+        planePoints, planeNames = parseFileNDI(fileNames, n, 1000)
+    else:
+        print("Parser does not exist.")
 
     ##################################################################
     # (C) Generate planes from the planePoints and
@@ -496,8 +515,7 @@ if __name__ == "__main__":
     run()  # Execute script.
 
     # Run this to sample the points (5-9 in this case.  Change it if
-    # you want) and see how accuracy changes based on sampling.  Works
-    # for parsePoints1(). NOT fully implemented for parse points 2.
+    # you want) and see how accuracy changes based on sampling.
     # for n in range(5, 10):
     #     print(f"Sampling {n} Points:")
     #     l = []
