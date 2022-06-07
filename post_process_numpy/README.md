@@ -79,7 +79,7 @@ angle between them.
 
 ## Functions
 
-##### parsePoints1(headerFileName: str, constantTransform: np.ndarray, sampleSize: int) -> tuple[np.ndarray, list[str]]
+##### parseFileKinova(headerFileName: str, constantTransform: np.ndarray, sampleSize: int) -> tuple[np.ndarray, list[str]]
 
 Takes in a filename specifying a header file, headerFileName, that
 is properly formatted and a constant transform, constantTransform,
@@ -89,9 +89,10 @@ file.  The return is a 3D tensor which is number of planes by
 number of points by 3 since each coordinate has 3 components as
 they are in R3.  Ad hoc for this problem and the header file
 provided.  If N Points are specified in the header, then
-sampleSize points are sampled for each plane.
+sampleSize points are sampled for each plane.  Properly
+formatted files are shown in the raw_data folder.
 
-##### parsePoints2(fileNames: list[str], sampleSize: int,threshold: int) -> tuple[list[list[float]], list[str]]
+##### parseFileNDI(fileNames: list[str], sampleSize: int,threshold: int) -> tuple[list[list[float]], list[str]]
 
 Takes in a list of filename specifying csv files that are properly
 formatted and returns a list of all the points for each plane,
@@ -100,7 +101,8 @@ tensor which is number of planes by number of points by 3 since
 each coordinate has 3 components as they are in R3.  Ad hoc for
 this problem and the csvs provided.  If N Points are specified
 in the csvs, then sampleSize points are sampled for each plane.
-Removes any points with any components above threshold.
+Removes any points with any components above threshold.  A properly
+formatted file is shown in the raw_data folder.
 
 ##### visualizeResults(planes: list[Plane], intersections: np.ndarray, terms: list[str], axisLengths: list[float], planePoints: np.ndarray, graphPlanes: bool=True, graphPoints: bool=True, graphIntersections: bool=True) -> None
 
@@ -114,7 +116,6 @@ to find the fit planes in 3D to evaluate the results.
 The main function used for all execution and to not pollute the
 global namespace. Parts (A) - (F) define all parts of the code.
 Takes in a variable to n for sampling points.  Uses all points
-if n = math.inf (default).  n != 0 Works for parsePoints1(),
-however it is NOT fully implemented for parsePoints2() as it
-does not sample points.
+if n = math.inf (default) or if n is greater than the number of
+points to sample.
 
